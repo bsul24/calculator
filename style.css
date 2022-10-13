@@ -14,7 +14,9 @@
   align-items: center;
   justify-content: center;
   margin: 0 auto;
+  padding: 0 2rem;
   gap: 0.5rem;
+  max-width: 350px;
 }
 
 .row {
@@ -37,8 +39,4 @@ button {
   font-size: 36px;
   width: 70px;
   height: 70px;
-}
-
-.zero {
-  width: 148px;
 }

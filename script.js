@@ -4,7 +4,10 @@
 const display = document.querySelector(".display");
 const displayBtns = [...document.querySelectorAll(".display-btn")];
 const numberBtns = [...document.querySelectorAll(".num-btn")];
+const decimalBtn = document.querySelector(".decimal-btn");
 const operatorBtns = [...document.querySelectorAll(".operator-btn")];
+const percentBtn = document.querySelector(".percent-btn");
+const signBtn = document.querySelector(".sign-btn");
 const equalBtn = document.querySelector(".equal-btn");
 const clearBtn = document.querySelector(".clear-btn");
 
@@ -33,7 +36,7 @@ const divide = function (a, b) {
   if (b === 0) {
     clearDisplay();
     isError = true;
-    return "ERR: divide by 0";
+    return "Error";
   }
   return a / b;
 };
@@ -61,9 +64,9 @@ const handleNumber = function (e) {
 const handleOperator = function (e) {
   if (isError) return;
 
-  if (!num1 && !curNumber) return;
+  if (typeof num1 !== "number" && !curNumber) return;
 
-  if (!num1 && curNumber) {
+  if (typeof num1 !== "number" && curNumber) {
     num1 = +curNumber;
     curNumber = "";
   } else if (num1 && curNumber) {
@@ -79,8 +82,50 @@ const handleOperator = function (e) {
   if (e.target.textContent === "/") operator = divide;
 };
 
+const handlePercent = function () {
+  if (!display.textContent) return;
+
+  if (typeof num1 !== "number" || curNumber) {
+    curNumber = +curNumber / 100;
+    display.textContent = curNumber;
+    return;
+  }
+
+  num1 /= 100;
+  display.textContent = +display.textContent / 100;
+};
+
+const handleSignChange = function () {
+  if (typeof num1 !== "number" || (curNumber && curNumber !== "-")) {
+    curNumber = +curNumber * -1;
+    display.textContent = curNumber;
+    return;
+  }
+
+  if (equalPressed) {
+    num1 *= -1;
+    display.textContent = num1;
+    return;
+  }
+
+  if (!curNumber) {
+    curNumber = "-";
+    display.textContent = "-";
+    return;
+  }
+
+  if (curNumber === "-") {
+    curNumber = "";
+    display.textContent = "0";
+    return;
+  }
+
+  num1 *= -1;
+  display.textContent = +display.textContent * -1;
+};
+
 const handleEquals = function () {
-  if (!num1 || isError) return;
+  if (typeof num1 !== "number" || isError) return;
 
   if (curNumber) num2 = +curNumber;
 
@@ -100,13 +145,12 @@ const displayResult = function () {
 const clearDisplay = function () {
   display.textContent = "0";
   curNumber = "";
-  num1 = 0;
-  num2 = 0;
-  operator = 0;
+  num1 = null;
+  num2 = null;
+  operator = null;
 };
 
 const trimDisplayLength = function () {
-  // display.textContent = display.textContent.slice(0, 10);
   if (Math.abs(+display.textContent) === Infinity) {
     display.textContent = "Error";
     return;
@@ -114,16 +158,42 @@ const trimDisplayLength = function () {
   if (+display.textContent > Number.MAX_SAFE_INTEGER) {
     display.textContent = BigInt(+display.textContent);
   }
+  if (+display.textContent < 999999999) {
+    let displayNumbers = 0;
+    for (let i = 0; i < display.textContent.length; i++) {
+      if (typeof +display.textContent[i] === "number") {
+        displayNumbers++;
+      }
+    }
+    if (displayNumbers < 10) return;
+    display.textContent = display.textContent.slice(0, 10);
+  }
   if (+display.textContent > 999999999) {
     const scientific = (+display.textContent).toExponential();
+    if (scientific.length < 11) {
+      const plus = scientific.indexOf("+");
+      const scientificNoPlus =
+        scientific.slice(0, plus) + scientific.slice(plus + 1);
+      display.textContent = scientificNoPlus;
+      return;
+    }
     const e = scientific.indexOf("e");
-    display.textContent = scientific.slice(0, 7) + scientific.slice(e);
+    const decimals = 9 - scientific.slice(e).length;
+    const newScientific =
+      (+scientific.slice(0, e)).toFixed(decimals) + scientific.slice(e);
+    const plus = newScientific.indexOf("+");
+    const newScientificNoPlus =
+      newScientific.slice(0, plus) + newScientific.slice(plus + 1);
+    display.textContent = newScientificNoPlus;
+    // display.textContent =
+    //   Math.round(+scientific.slice(0, 7)) + scientific.slice(e);
   }
 };
 
 // Event listeners
-// displayBtns.forEach((btn) => btn.addEventListener("click", addToDisplay));
 numberBtns.forEach((btn) => btn.addEventListener("click", handleNumber));
 operatorBtns.forEach((btn) => btn.addEventListener("click", handleOperator));
+percentBtn.addEventListener("click", handlePercent);
+signBtn.addEventListener("click", handleSignChange);
 equalBtn.addEventListener("click", handleEquals);
 clearBtn.addEventListener("click", clearDisplay);
