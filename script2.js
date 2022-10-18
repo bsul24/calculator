@@ -2,10 +2,13 @@
 
 // DOM elements
 const display = document.querySelector(".display");
-const displayBtns = [...document.querySelectorAll(".display-btn")];
 const numberBtns = [...document.querySelectorAll(".num-btn")];
 const decimalBtn = document.querySelector(".decimal-btn");
 const operatorBtns = [...document.querySelectorAll(".operator-btn")];
+const addBtn = document.querySelector(".add-btn");
+const subtractBtn = document.querySelector(".subtract-btn");
+const multiplyBtn = document.querySelector(".multiply-btn");
+const divideBtn = document.querySelector(".divide-btn");
 const percentBtn = document.querySelector(".percent-btn");
 const signBtn = document.querySelector(".sign-btn");
 const equalBtn = document.querySelector(".equal-btn");
@@ -14,18 +17,10 @@ const allBtns = [...document.querySelectorAll("button")];
 
 // State
 const state = {
-  displayValue: "",
   stored: "",
   operator: "",
-  lastButtonPressed: "",
+  lastButtonOperator: false,
 };
-// Last button options: number, clear, decimal, back, percent, sign, operator, equal, ''
-// let curNumber = "";
-// let num1;
-// let num2;
-// let operator;
-// let equalPressed = false;
-// let isError = false;
 
 // Functions
 const add = function (a, b) {
@@ -55,18 +50,41 @@ const operate = function (operator, a, b) {
 
 const handleNumber = function (e) {
   const number = e.target.textContent;
-  state.displayValue += number;
-  display.textContent = state.displayValue;
+  if (display.textContent === "0") {
+    display.textContent = number;
+  } else {
+    display.textContent += number;
+  }
+};
+
+const handleDecimal = function () {
+  const displayValue = display.textContent;
+  for (let i = 0; i < displayValue.length; i++) {
+    if (displayValue[i] === ".") return;
+  }
+
+  display.textContent += ".";
 };
 
 const handleOperator = function (e) {
-  const button = e.target.textContent;
-  state.stored = +state.displayValue;
-  state.displayValue = "";
-  if (button === "+") state.operator = add;
-  if (button === "-") state.operator = subtract;
-  if (button === "×") state.operator = multiply;
-  if (button === "÷") state.operator = divide;
+  operatorBtns.forEach((btn) => btn.classList.remove("selected"));
+  const button = e.target;
+  if (button === addBtn) {
+    state.operator = add;
+    addBtn.classList.add("selected");
+  }
+  if (button === addBtn) {
+    state.operator = add;
+    addBtn.classList.add("selected");
+  }
+  if (button === addBtn) {
+    state.operator = add;
+    addBtn.classList.add("selected");
+  }
+  if (button === addBtn) {
+    state.operator = add;
+    addBtn.classList.add("selected");
+  }
 };
 
 const handleEquals = function () {
@@ -91,3 +109,4 @@ numberBtns.forEach((btn) => btn.addEventListener("click", handleNumber));
 operatorBtns.forEach((btn) => btn.addEventListener("click", handleOperator));
 equalBtn.addEventListener("click", handleEquals);
 clearBtn.addEventListener("click", handleClear);
+decimalBtn.addEventListener("click", handleDecimal);

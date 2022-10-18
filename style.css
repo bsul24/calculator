@@ -40,3 +40,7 @@ button {
   width: 70px;
   height: 70px;
 }
+
+.selected {
+  background-color: #868e96;
+}
