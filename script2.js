@@ -9,6 +9,7 @@ const addBtn = document.querySelector(".add-btn");
 const subtractBtn = document.querySelector(".subtract-btn");
 const multiplyBtn = document.querySelector(".multiply-btn");
 const divideBtn = document.querySelector(".divide-btn");
+const deleteBtn = document.querySelector(".delete-btn");
 const percentBtn = document.querySelector(".percent-btn");
 const signBtn = document.querySelector(".sign-btn");
 const equalBtn = document.querySelector(".equal-btn");
@@ -55,6 +56,9 @@ const handleNumber = function (e) {
   const number = e.target.textContent;
   if (display.textContent === "0" || state.lastKeyPressed === "operator") {
     display.textContent = number;
+  } else if (state.lastKeyPressed === "equals") {
+    display.textContent = number;
+    state.stored = "";
   } else {
     display.textContent += number;
   }
@@ -63,7 +67,11 @@ const handleNumber = function (e) {
 };
 
 const handleDecimal = function () {
-  if (state.lastKeyPressed === "operator") {
+  if (
+    state.lastKeyPressed === "operator" ||
+    state.lastKeyPressed === "equals"
+  ) {
+    if (state.lastKeyPressed === "equals") state.stored = "";
     display.textContent = "0.";
     state.lastKeyPressed = "decimal";
     return;
@@ -79,14 +87,21 @@ const handleDecimal = function () {
 
 const handleOperator = function (e) {
   removeOperatorHighlights();
-  if (state.stored && state.lastKeyPressed !== "operator") {
+  if (
+    state.stored &&
+    state.lastKeyPressed !== "operator" &&
+    state.lastKeyPressed !== "equals"
+  ) {
     const result = operate(state.operator, state.stored, +display.textContent);
     display.textContent = result;
   }
+  if (state.lastKeyPressed !== "equals") {
+    state.stored = +display.textContent;
+  }
+
   state.lastKeyPressed = "operator";
   const button = e.target;
 
-  state.stored = +display.textContent;
   if (button === addBtn) {
     state.operator = add;
     addBtn.classList.add("selected");
@@ -103,6 +118,28 @@ const handleOperator = function (e) {
     state.operator = divide;
     divideBtn.classList.add("selected");
   }
+};
+
+const handleDelete = function () {
+  if (display.textContent === "0" || display.textContent === "-0") return;
+
+  if (state.lastKeyPressed === "operator") {
+    display.textContent = "0";
+  } else if (state.lastKeyPressed === "equals") {
+    display.textContent = "0";
+    state.stored = "";
+  } else if (
+    +display.textContent >= -9 &&
+    +display.textContent <= 9 &&
+    Number.isInteger(+display.textContent) &&
+    display.textContent.slice(-1) !== "."
+  ) {
+    display.textContent = "0";
+  } else {
+    display.textContent = display.textContent.slice(0, -1);
+  }
+
+  state.lastKeyPressed = "delete";
 };
 
 const handleEquals = function () {
@@ -146,6 +183,7 @@ operatorBtns.forEach((btn) =>
     this.classList.add("mousedown");
   })
 );
+deleteBtn.addEventListener("click", handleDelete);
 equalBtn.addEventListener("click", handleEquals);
 clearBtn.addEventListener("click", handleClear);
 decimalBtn.addEventListener("click", handleDecimal);
