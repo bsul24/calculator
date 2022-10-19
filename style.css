@@ -39,8 +39,13 @@ button {
   font-size: 36px;
   width: 70px;
   height: 70px;
+  transition: all 0.2s;
 }
 
 .selected {
   background-color: #868e96;
+}
+
+.mousedown {
+  background-color: #ced4da;
 }
