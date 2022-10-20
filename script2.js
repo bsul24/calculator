@@ -197,9 +197,16 @@ const trimDisplayValue = function (e) {
             return;
           }
         }
+
         display.textContent = scientific;
       }
     }
+  }
+  if (+display.textContent > 999999999) {
+    display.textContent = Number(display.textContent)
+      .toExponential()
+      .toString()
+      .replace("+", "");
   }
 };
 
