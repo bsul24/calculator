@@ -11,6 +11,7 @@ const allBtns = [...document.querySelectorAll("button")];
 
 // State
 const state = {
+  displayValue: "",
   stored: "",
   tempStored: "",
   operator: "",
@@ -40,6 +41,12 @@ const divide = function (a, b) {
 };
 
 const operate = function (operator, a, b) {
+  if (typeof a === "bigint" || typeof b === "bigint") {
+    a = BigInt(a);
+    b = BigInt(b);
+  }
+  console.log(a);
+  console.log(b);
   return operator(a, b);
 };
 
@@ -151,9 +158,64 @@ const createDisplayValue = function (e, buttonType) {
   }
 };
 
+const trimDisplayValue = function (buttonType) {
+  let count = 0;
+  let decimalIndex;
+  for (let i = 0; i < display.textContent.length; i++) {
+    if (Number.isInteger(+display.textContent[i])) {
+      count++;
+    }
+    if (display.textContent[i] === ".") {
+      decimalIndex = i;
+    }
+    if (count === 9) {
+      if (buttonType === "number" || buttonType === "decimal") {
+        display.textContent = display.textContent.slice(0, i + 1);
+        return;
+      }
+      if (decimalIndex && +display.textContent <= 999999999) {
+        const decimalShift = 10 ** (i - decimalIndex);
+        display.textContent =
+          Math.round(+display.textContent * decimalShift) / decimalShift;
+        return;
+      }
+      if (+display.textContent > 999999999) {
+        if (+display.textContent > Number.MAX_SAFE_INTEGER) {
+          display.textContent = BigInt(+display.textContent);
+        }
+        console.log(display.textContent);
+        const scientific = Number(display.textContent)
+          .toExponential()
+          .toString()
+          .replace("+", "");
+        const allowedDecimals =
+          7 - scientific.slice(scientific.indexOf("e") + 1).length;
+        let count = 0;
+        for (let i = 0; i < scientific.indexOf("e"); i++) {
+          if (Number.isInteger(+scientific[i])) {
+            count++;
+          }
+          if (count === allowedDecimals) {
+            const decimalShift = 10 ** allowedDecimals;
+            display.textContent = `${
+              Math.round(
+                Number(scientific.slice(0, scientific.indexOf("e"))) *
+                  decimalShift
+              ) / decimalShift
+            }${scientific.slice(scientific.indexOf("e"))}`;
+            return;
+          }
+        }
+        display.textContent = scientific;
+      }
+    }
+  }
+};
+
 const updateUI = function (e) {
   const buttonType = getButtonType(e);
   display.textContent = createDisplayValue(e, buttonType);
+  trimDisplayValue(buttonType);
   if (buttonType === "number") {
     removeOperatorHighlights();
   }
@@ -223,12 +285,18 @@ const updateState = function (e) {
     if (state.stored === "") return;
 
     if (state.lastKeyPressed !== "equals") {
-      state.tempStored = +display.textContent;
+      state.tempStored =
+        +display.textContent > Number.MAX_SAFE_INTEGER
+          ? BigInt(+display.textContent)
+          : +display.textContent;
       state.lastKeyPressed = buttonType;
       return;
     }
 
-    state.stored = +display.textContent;
+    state.stored =
+      +display.textContent > Number.MAX_SAFE_INTEGER
+        ? BigInt(+display.textContent)
+        : +display.textContent;
   }
 
   if (buttonType === "clear") {
