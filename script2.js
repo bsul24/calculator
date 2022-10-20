@@ -41,12 +41,6 @@ const divide = function (a, b) {
 };
 
 const operate = function (operator, a, b) {
-  if (typeof a === "bigint" || typeof b === "bigint") {
-    a = BigInt(a);
-    b = BigInt(b);
-  }
-  console.log(a);
-  console.log(b);
   return operator(a, b);
 };
 
@@ -158,7 +152,8 @@ const createDisplayValue = function (e, buttonType) {
   }
 };
 
-const trimDisplayValue = function (buttonType) {
+const trimDisplayValue = function (e) {
+  const buttonType = getButtonType(e);
   let count = 0;
   let decimalIndex;
   for (let i = 0; i < display.textContent.length; i++) {
@@ -180,10 +175,6 @@ const trimDisplayValue = function (buttonType) {
         return;
       }
       if (+display.textContent > 999999999) {
-        if (+display.textContent > Number.MAX_SAFE_INTEGER) {
-          display.textContent = BigInt(+display.textContent);
-        }
-        console.log(display.textContent);
         const scientific = Number(display.textContent)
           .toExponential()
           .toString()
@@ -215,7 +206,7 @@ const trimDisplayValue = function (buttonType) {
 const updateUI = function (e) {
   const buttonType = getButtonType(e);
   display.textContent = createDisplayValue(e, buttonType);
-  trimDisplayValue(buttonType);
+  // trimDisplayValue(buttonType);
   if (buttonType === "number") {
     removeOperatorHighlights();
   }
@@ -264,6 +255,7 @@ const updateState = function (e) {
   if (buttonType === "operator") {
     if (state.lastKeyPressed !== "equals") {
       state.stored = +display.textContent;
+      // state.stored = +state.displayValue;
     }
 
     if (e.target === addBtn) {
@@ -285,18 +277,14 @@ const updateState = function (e) {
     if (state.stored === "") return;
 
     if (state.lastKeyPressed !== "equals") {
-      state.tempStored =
-        +display.textContent > Number.MAX_SAFE_INTEGER
-          ? BigInt(+display.textContent)
-          : +display.textContent;
+      state.tempStored = +display.textContent;
+      // state.tempStored = state.displayValue;
       state.lastKeyPressed = buttonType;
       return;
     }
 
-    state.stored =
-      +display.textContent > Number.MAX_SAFE_INTEGER
-        ? BigInt(+display.textContent)
-        : +display.textContent;
+    state.stored = +display.textContent;
+    // state.stored = state.displayValue;
   }
 
   if (buttonType === "clear") {
@@ -314,6 +302,7 @@ const updateState = function (e) {
   if (buttonType === "percent") {
     if (state.lastKeyPressed === "equals") {
       state.stored = +display.textContent;
+      // state.stored = +state.displayValue;
       return;
     }
   }
@@ -321,6 +310,7 @@ const updateState = function (e) {
   if (buttonType === "sign") {
     if (state.lastKeyPressed === "equals") {
       state.stored = +display.textContent;
+      // state.stored = +state.displayValue;
       return;
     }
   }
@@ -333,6 +323,7 @@ allBtns.forEach((btn) =>
   btn.addEventListener("click", function (e) {
     updateUI(e);
     updateState(e);
+    trimDisplayValue(e);
   })
 );
 operatorBtns.forEach((btn) =>
