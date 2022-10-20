@@ -168,13 +168,13 @@ const trimDisplayValue = function (e) {
         display.textContent = display.textContent.slice(0, i + 1);
         return;
       }
-      if (decimalIndex && +display.textContent <= 999999999) {
+      if (decimalIndex && Math.abs(+display.textContent) <= 999999999) {
         const decimalShift = 10 ** (i - decimalIndex);
         display.textContent =
           Math.round(+display.textContent * decimalShift) / decimalShift;
         return;
       }
-      if (+display.textContent > 999999999) {
+      if (Math.abs(+display.textContent) > 999999999) {
         const scientific = Number(display.textContent)
           .toExponential()
           .toString()
