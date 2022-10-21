@@ -285,6 +285,14 @@ const trimDisplayValue = function (e) {
 
 const formatNumber = function () {
   state.unformattedDisplay = display.textContent;
+  if (display.textContent.includes(".")) {
+    const split = display.textContent.split(".");
+    split[0] = new Intl.NumberFormat().format(split[0]);
+    display.textContent = split.join(".");
+    return;
+  }
+  if (+display.textContent < 1) return;
+  display.textContent = new Intl.NumberFormat().format(display.textContent);
 };
 
 const updateUI = function (e) {
@@ -421,9 +429,11 @@ window.addEventListener("keydown", function (e) {
     target: getKey(e),
   };
   if (!e.target) return;
+  display.textContent = state.unformattedDisplay || "0";
   updateUI(e);
   updateState(e);
   trimDisplayValue(e);
+  formatNumber(e);
 });
 
 sideBtns.forEach((btn) =>
