@@ -17,6 +17,7 @@ const equalBtn = document.querySelector(".equal-btn");
 const sideBtns = [...document.querySelectorAll(".side-btn")];
 const darkGrayBtns = [...document.querySelectorAll(".dark-gray-bg")];
 const functionBtns = [...document.querySelectorAll(".function-btn")];
+const container = document.querySelector(".container");
 const allBtns = [...document.querySelectorAll("button")];
 
 // State
@@ -460,4 +461,4 @@ window.addEventListener("keyup", function (e) {
     ?.classList.remove("function-btn-active");
 });
 
-window.addEventListener("touchstart", (e) => e.preventDefault());
+container.addEventListener("touchstart", (e) => e.preventDefault());
