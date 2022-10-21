@@ -461,9 +461,11 @@ window.addEventListener("keyup", function (e) {
     ?.classList.remove("function-btn-active");
 });
 
-window.onscroll = function () {
-  window.scrollTo(0, 0);
-};
+window.addEventListener("touchmove", (e) => e.preventDefault());
+
+// window.onscroll = function () {
+//   window.scrollTo(0, 0);
+// };
 
 // container.addEventListener("touchstart", function (e) {
 //   if (allBtns.some((btn) => btn === e.target)) return;
