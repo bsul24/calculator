@@ -459,3 +459,5 @@ window.addEventListener("keyup", function (e) {
     .find((btn) => btn === key)
     ?.classList.remove("function-btn-active");
 });
+
+window.addEventListener("touchstart", (e) => e.preventDefault());
