@@ -460,3 +460,15 @@ window.addEventListener("keyup", function (e) {
     .find((btn) => btn === key)
     ?.classList.remove("function-btn-active");
 });
+
+darkGrayBtns.forEach((btn) =>
+  btn.addEventListener("pointerdown", () =>
+    btn.classList.add("dark-gray-bg-active")
+  )
+);
+
+darkGrayBtns.forEach((btn) =>
+  btn.addEventListener("pointerup", () =>
+    btn.classList.remove("dark-gray-bg-active")
+  )
+);
