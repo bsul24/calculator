@@ -420,7 +420,7 @@ const updateState = function (e) {
 // Event listeners
 allBtns.forEach((btn) =>
   btn.addEventListener("click", function (e) {
-    if (!btn.classList.contains("pointerdown")) return;
+    // if (!btn.classList.contains("pointerdown")) return;
     display.textContent = state.unformattedDisplay || "0";
     updateUI(e);
     updateState(e);
@@ -430,13 +430,13 @@ allBtns.forEach((btn) =>
 );
 
 // These two listeners are to make sure that a button only works when you click on it and the mouse is in the button the whole time.
-allBtns.forEach((btn) =>
-  btn.addEventListener("mousedown", () => btn.classList.add("pointerdown"))
-);
+// allBtns.forEach((btn) =>
+//   btn.addEventListener("mousedown", () => btn.classList.add("pointerdown"))
+// );
 
-allBtns.forEach((btn) =>
-  btn.addEventListener("mouseleave", () => btn.classList.remove("pointerdown"))
-);
+// allBtns.forEach((btn) =>
+//   btn.addEventListener("mouseleave", () => btn.classList.remove("pointerdown"))
+// );
 
 window.addEventListener("keydown", function (e) {
   e = {
