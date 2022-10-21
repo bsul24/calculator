@@ -461,8 +461,12 @@ window.addEventListener("keyup", function (e) {
     ?.classList.remove("function-btn-active");
 });
 
-container.addEventListener("touchstart", function (e) {
-  if (allBtns.some((btn) => btn === e.target)) return;
+window.onscroll = function () {
+  window.scrollTo(0, 0);
+};
 
-  e.preventDefault();
-});
+// container.addEventListener("touchstart", function (e) {
+//   if (allBtns.some((btn) => btn === e.target)) return;
+
+//   e.preventDefault();
+// });
