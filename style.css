@@ -58,15 +58,26 @@ button {
   height: 70px;
   transition: all 0.2s;
   touch-action: manipulation;
+  user-select: none;
+}
+
+@media (hover: hover) {
+  .dark-gray-bg:hover {
+    background-color: #adb5bd;
+  }
+
+  .function-btn:hover {
+    background-color: #f8f9fa;
+  }
+
+  .side-btn:hover {
+    background-color: #ffd43b;
+  }
 }
 
 .dark-gray-bg {
   background-color: #495057;
   color: #fff;
-}
-
-.dark-gray-bg:hover {
-  background-color: #adb5bd;
 }
 
 .dark-gray-bg:active,
@@ -79,10 +90,6 @@ button {
   color: #000;
 }
 
-.function-btn:hover {
-  background-color: #f8f9fa;
-}
-
 .function-btn:active,
 .function-btn-active {
   background-color: #dee2e6;
@@ -91,10 +98,6 @@ button {
 .side-btn {
   background-color: #f59f00;
   color: #fff;
-}
-
-.side-btn:hover {
-  background-color: #ffd43b;
 }
 
 .side-btn:active {

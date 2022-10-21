@@ -416,7 +416,7 @@ const updateState = function (e) {
 
 // Event listeners
 allBtns.forEach((btn) =>
-  btn.addEventListener("pointerup", function (e) {
+  btn.addEventListener("click", function (e) {
     display.textContent = state.unformattedDisplay || "0";
     updateUI(e);
     updateState(e);
