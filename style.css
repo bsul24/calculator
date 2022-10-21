@@ -110,6 +110,15 @@ button {
 }
 
 @media (max-width: 500px) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
+
+  body {
+    position: relative;
+  }
+
   .container {
     background-color: #000;
   }
