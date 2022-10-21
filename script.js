@@ -416,7 +416,7 @@ const updateState = function (e) {
 
 // Event listeners
 allBtns.forEach((btn) =>
-  btn.addEventListener("click", function (e) {
+  btn.addEventListener("pointerup", function (e) {
     display.textContent = state.unformattedDisplay || "0";
     updateUI(e);
     updateState(e);
@@ -460,15 +460,3 @@ window.addEventListener("keyup", function (e) {
     .find((btn) => btn === key)
     ?.classList.remove("function-btn-active");
 });
-
-// container.addEventListener("touchmove", (e) => e.preventDefault());
-
-// window.onscroll = function () {
-//   window.scrollTo(0, 0);
-// };
-
-// container.addEventListener("touchstart", function (e) {
-//   if (allBtns.some((btn) => btn === e.target)) return;
-
-//   e.preventDefault();
-// });
