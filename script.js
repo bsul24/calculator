@@ -431,13 +431,11 @@ allBtns.forEach((btn) =>
 
 // These two listeners are to make sure that a button only works when you click on it and the mouse is in the button the whole time.
 allBtns.forEach((btn) =>
-  btn.addEventListener("pointerdown", () => btn.classList.add("pointerdown"))
+  btn.addEventListener("mousedown", () => btn.classList.add("pointerdown"))
 );
 
 allBtns.forEach((btn) =>
-  btn.addEventListener("pointerleave", () =>
-    btn.classList.remove("pointerdown")
-  )
+  btn.addEventListener("mouseleave", () => btn.classList.remove("pointerdown"))
 );
 
 window.addEventListener("keydown", function (e) {
